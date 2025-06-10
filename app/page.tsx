@@ -31,10 +31,18 @@ const Home = () => {
       .order("created_at", { ascending: true });
 
     if (error) {
-      console.error("Error adding task", error.message);
+      console.error("Error getting tasks", error.message);
       return;
     }
     setTasks(data);
+  };
+
+  const deleteTask = async (id: string) => {
+    const { error } = await supabase.from("tasks").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting task", error.message);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -84,7 +92,7 @@ const Home = () => {
               </div>
               <div>
                 <button>Edit</button>
-                <button>Delete</button>
+                <button onClick={() => deleteTask(item.id)}>Delete</button>
               </div>
             </li>
           ))}
